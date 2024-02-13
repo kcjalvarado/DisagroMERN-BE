@@ -23,9 +23,9 @@ const productsSchema = new mongoose.Schema({
   const products = mongoose.model("products", productsSchema)
   
   const newProd = products({
-    id:9,
-    name:"Servicio 3",
-    cost: 1200,
+    id:11,
+    name:"Servicio 5",
+    cost: 1300,
     type:"servicio"
 });
 //newProd.save()

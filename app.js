@@ -8,6 +8,7 @@ const winston = require('winston');
 const collection = require("./mongo")
 const bodyParser = require('body-parser')
 const productModel = require ('./models/Products')
+const confirmationsModel = require ('./models/confirmations')
 
 
 
@@ -27,15 +28,6 @@ const app = express();
 app.use(express.json())
 
 // db
-/*
-mongoose.connect(process.env.MONGO_URI, 
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }
-).then(() => console.log("DB Conected"))
-.catch((err) => console.log("DB CONNECTION ERROR", err))
-*/
 
 const productSchema = new mongoose.Schema({
   name: String,
@@ -82,7 +74,24 @@ app.post("/", async(req,res)=>{
     }
 })
 
+app.post('/submit-data', (req, res) => {
+  // Extract data from request body
+  const data = req.body;
 
+  // Create new document with extracted data
+  const newData = new confirmationsModel(data);
+
+  // Save document to MongoDB
+  newData.save()
+    .then(savedData => {
+      console.log('Data saved to MongoDB:', savedData);
+      res.status(201).send('Data saved successfully');
+    })
+    .catch(err => {
+      console.error('Error saving data to MongoDB:', err);
+      res.status(500).send('Error saving data to MongoDB');
+    });
+});
 
 
 
